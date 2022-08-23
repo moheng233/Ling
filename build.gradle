@@ -11,11 +11,28 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
+	mavenCentral()
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven { url 'https://maven.wispforest.io' }
+	maven {
+        name = "Ladysnake Mods"
+        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+    }
+	maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+	maven {
+        name = "CottonMC"
+        url = "https://server.bbkr.space/artifactory/libs-release"
+    }
 }
 
 dependencies {
@@ -24,6 +41,8 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
+	implementation "org.apache.commons:commons-collections4:4.4"
+
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
@@ -31,6 +50,19 @@ dependencies {
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+
+	modImplementation "io.wispforest:owo-lib:${project.owo_version}"
+	// modInclude "io.wispforest:owo-sentinel:${project.owo_version}"
+
+	// Replace modImplementation with modApi if you expose components in your own API
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.components_version}"
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.components_version}"
+    // Includes Cardinal Components API as a Jar-in-Jar dependency (optional but recommended)
+    // modInclude "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.components_version}"
+
+	// modImplementation "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
+
+	// modImplementation include("io.github.cottonmc:LibGui:${project.libgui_version}")
 }
 
 processResources {

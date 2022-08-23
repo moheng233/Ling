@@ -1,0 +1,23 @@
+{
+    "itemGroup.lingmod.general": "灵",
+    "block.lingmod.spell_edit_table_block": "术式编程桌",
+
+    "item.lingmod.spell_code": "术式代码",
+
+    "spell_stack_data.lingmod.int": "整数",
+    "spell_stack_data.lingmod.bool": "布尔",
+    
+    "spell_block.lingmod.on_use": "当施法时",
+    "spell_block.lingmod.get_ower": "获取施法者",
+    "spell_block.lingmod.get_entity_pos": "获取实体坐标", 
+    "spell_block.lingmod.const_pos": "坐标常量", 
+    "spell_block.lingmod.pos_add": "坐标求和", 
+    "spell_block.lingmod.break_block": "破坏方块", 
+
+    "key.lingmod.category": "灵",
+    "key.lingmod.open_skill_gui": "打开施法选择",
+
+    "gui.lingmod.spell_block.type": "类型：",
+    "gui.lingmod.spell_block.type.process": "过程",
+    "gui.lingmod.spell_block.type.handle": "处理"
+}

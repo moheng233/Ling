@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "lingmod",
   "version": "${version}",
 
-  "name": "Example Mod",
+  "name": "灵",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Me!"
+    "Moheng"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -14,17 +14,24 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/lingmod/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "site.moheng.ling.LingMod"
+    ],
+    "client": [
+      "site.moheng.ling.LingModClient"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "LingMod.mixins.json"
   ],
+  "custom": {
+    "loom:injected_interfaces": {
+    }
+  },
 
   "depends": {
     "fabricloader": ">=0.14.6",
