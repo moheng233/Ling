@@ -35,9 +35,12 @@ import site.moheng.ling.spell.entry.SpellNodeEntry;
 import site.moheng.ling.util.GridHelper;
 import site.moheng.ling.util.MathRect;
 import site.moheng.ling.util.NinePatchHelper;
+import site.moheng.ling.util.GridHelper.GridColumn;
 import site.moheng.ling.util.GridHelper.GridRow;
 
 public abstract class SpellNode {
+    private static final Identifier EXTA = new Identifier(LingMod.MODID, "exta");
+
     @Environment(EnvType.CLIENT)
     private static final Identifier TEXTURE = new Identifier(LingMod.MODID, "textures/gui/spell_edit.png");
 
@@ -90,13 +93,24 @@ public abstract class SpellNode {
     }
 
     @Environment(EnvType.CLIENT)
+    public int getExtWidth() {
+        return 0;
+    }
+
+    @Environment(EnvType.CLIENT)
+    public int getExtHeight() {
+        return 0;
+    }
+
+    @Environment(EnvType.CLIENT)
     public void layout(boolean first) {
         if (first) {
             var client = MinecraftClient.getInstance();
             grid.clear();
             var row = grid.createRow();
             row.createColumn(16, 16).link(TEXTURE);
-            row.createColumn(client.textRenderer.getWidth(getName()), 16).link(getName());;
+            row.createColumn(client.textRenderer.getWidth(getName()), 16).link(getName());
+            ;
             int count = Math.max(io.getPointSize(IOType.INPUT), io.getPointSize(IOType.OUTPUT));
             GridRow rows[] = new GridRow[count];
             for (int i = 0; i < count; i++) {
@@ -105,9 +119,10 @@ public abstract class SpellNode {
             {
                 var i = 0;
                 for (var point : io.getPoints(IOType.INPUT)) {
-                    rows[i].createColumn(8, 8);
+                    rows[i].createColumn(8, 8).link(new IOPointID(point));;
                     rows[i].createColumn(client.textRenderer.getWidth(point.name),
-                            Math.max(8, client.textRenderer.fontHeight)).link(point);;
+                            Math.max(8, client.textRenderer.fontHeight)).link(point);
+                    ;
                     i += 1;
                 }
             }
@@ -117,12 +132,14 @@ public abstract class SpellNode {
             {
                 var i = 0;
                 for (var point : io.getPoints(IOType.OUTPUT)) {
-                    rows[i].createColumn(8, 8);
                     rows[i].createColumn(client.textRenderer.getWidth(point.name),
                             Math.max(8, client.textRenderer.fontHeight)).link(point);
+                    rows[i].createColumn(8, 8).link(new IOPointID(point));;
                     i += 1;
                 }
             }
+            grid.createRow().createColumn(getExtWidth(), getExtHeight()).link(EXTA);
+            ;
         }
 
         grid.layout();
@@ -130,34 +147,23 @@ public abstract class SpellNode {
 
     @Environment(EnvType.CLIENT)
     public void drawNode(MatrixStack matrices, DrawableHelper helper, TextRenderer textRenderer, NbtCompound exta) {
-        layout(false);
+        layout(true);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
         BACKAGE.draw(matrices, 0, 0, getWidth(), getHeight());
         matrices.push();
-        helper.drawTexture(matrices, 0, 0, 32, 208, 16, 16);
-        textRenderer.drawWithShadow(matrices, getName(), 20, 4, 0xFFFFFF);
-        matrices.translate(0, 16, 0);
+        GridColumn column = grid.getColumn(TEXTURE);
+        helper.drawTexture(matrices, column.getX(), column.getY(), 32, 208, column.width, column.width);
+        column = grid.getColumn(getName());
+        textRenderer.drawWithShadow(matrices, getName(), column.getX(), column.getY(), 0xFFFFFF);
         var io = getNodeIO();
-        matrices.push();
-        for (var point : io.getPoints(IOType.INPUT)) {
-            matrices.push();
+        for (var point : io.getPoints()) {
             drawIOPoint(matrices, point, helper, textRenderer);
-            matrices.pop();
-            matrices.translate(0, 10, 0);
         }
-        matrices.pop();
         matrices.push();
-        for (var point : io.getPoints(IOType.OUTPUT)) {
-            matrices.push();
-            drawIOPoint(matrices, point, helper, textRenderer);
-            matrices.pop();
-            matrices.translate(0, 10, 0);
-        }
-        matrices.pop();
-        matrices.push();
-        matrices.translate(0, 10 * Math.max(io.getPointSize(IOType.INPUT), io.getPointSize(IOType.OUTPUT)), 0);
+        column = grid.getColumn(EXTA);
+        matrices.translate(column.getX(), column.getY(), 0);
         drawExta(matrices, helper, textRenderer, exta);
         matrices.pop();
         matrices.pop();
@@ -176,21 +182,10 @@ public abstract class SpellNode {
     @Environment(EnvType.CLIENT)
     protected void drawIOPoint(MatrixStack matrices, NodeIOPoint<?> point, DrawableHelper helper,
             TextRenderer textRenderer) {
-        var text_x = 0;
-        var point_x = 0;
-        var color = 0xffffffff;
-        if (point.io == IOType.OUTPUT) {
-            text_x = getWidth() - textRenderer.getWidth(point.name) - 6;
-            point_x = getWidth() - textRenderer.getWidth(point.name);
-        } else {
-            text_x = 0;
-            point_x = -7;
-        }
-        if (point.isProcessPoint()) {
-            color = 0xff0000ff;
-        }
-        textRenderer.drawWithShadow(matrices, point.name, text_x, 0, color);
-        DrawableHelper.fill(matrices, point_x, 2, point_x + 6, 8, color);
+        GridColumn column = grid.getColumn(point);
+        textRenderer.drawWithShadow(matrices, point.name, column.getX(), column.getY(), 0xffffffff);
+        column = grid.getColumn(new IOPointID(point));
+        DrawableHelper.fill(matrices, column.getX(), column.getY(), column.getX() + 6, column.getY() + 8, 0xffffffff);
     }
 
     @Environment(EnvType.CLIENT)
@@ -231,11 +226,8 @@ public abstract class SpellNode {
 
     @Environment(EnvType.CLIENT)
     public MathRect getPointRect(NodeIOPoint<?> point) {
-        if (pointRectMap.isEmpty()) {
-            getPointRects();
-        }
-
-        return pointRectMap.get().get(point);
+        GridColumn column = grid.getColumn(new IOPointID(point));
+        return new MathRect(column.getX(), column.getY(), column.width, column.height);
     }
 
     /**
@@ -367,7 +359,6 @@ public abstract class SpellNode {
         @Environment(EnvType.CLIENT)
         public void render(MatrixStack matriers, int mouseX, int mouseY, float delta) {
 
-            
         }
     }
 
@@ -393,5 +384,9 @@ public abstract class SpellNode {
             this.hasChildBlock = hasChildBlock;
             this.key = key;
         }
+    }
+
+    private static record IOPointID(NodeIOPoint<?> point) {
+
     }
 }

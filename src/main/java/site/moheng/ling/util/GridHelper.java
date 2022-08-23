@@ -58,6 +58,10 @@ public final class GridHelper {
         }
     }
 
+    public GridColumn getColumn(Object object) {
+        return links.get(object);
+    }
+
     public static class GridRow {
         private List<GridColumn> columns = new ArrayList<>();
         private HashMap<GridColumn, Integer> xMap = new HashMap<>();
@@ -108,6 +112,7 @@ public final class GridHelper {
     public static class GridColumn {
         private GridHelper grid;
         private GridRow row;
+        private GridHDir dir = GridHDir.LEFT;
         public int width;
         public int height;
 
@@ -116,6 +121,12 @@ public final class GridHelper {
             this.row = row;
             this.width = width;
             this.height = height;
+        }
+
+        public GridColumn setDir(GridHDir dir) {
+            this.dir = dir;
+
+            return this;
         }
 
         public void link(Object object) {
@@ -133,5 +144,13 @@ public final class GridHelper {
         public void layout() {
 
         }
+    }
+
+    public static enum GridHDir {
+        LEFT, CENTER, RIGHT
+    }
+
+    public static enum GridVDir {
+        TOP, CENTER, BUTTOM
     }
 }
