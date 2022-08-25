@@ -43,8 +43,6 @@ public class LingMod implements ModInitializer {
 		FieldRegistrationHandler.register(LingModItems.class, MODID, false);
 		FieldRegistrationHandler.register(LingModBlocks.class, MODID, false);
 
-		FieldRegistrationHandler.register(SpellVariableTypes.class, MODID, false);
-		FieldRegistrationHandler.register(SpellNodes.class, MODID, false);
 	}
 
 	public void initGui() {

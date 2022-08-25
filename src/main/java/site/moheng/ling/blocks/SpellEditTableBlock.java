@@ -11,8 +11,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import site.moheng.ling.gui.SpellEditScreen;
-import site.moheng.ling.gui.WidgetScreen;
 
 public class SpellEditTableBlock extends BlockWithEntity {
 
