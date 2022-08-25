@@ -32,6 +32,7 @@ public class LingMod implements ModInitializer {
 		LOGGER.info("灵正在初始化!");
 
 		initGui();
+		LingModNetwork.initServer();
 
 		LingModBlockEntitys.init();
 		LingModItems.init();

@@ -11,12 +11,12 @@ public class WMargin extends AbsParentWidget {
 
     @Override
     public int getX(AbsWidget widget) {
-        return lPadding;
+        return getX() + lPadding;
     }
 
     @Override
     public int getY(AbsWidget widget) {
-        return tPadding;
+        return getY() + tPadding;
     }
 
     @Override

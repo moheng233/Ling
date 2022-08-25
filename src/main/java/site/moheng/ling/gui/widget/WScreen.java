@@ -18,12 +18,12 @@ public class WScreen extends AbsParentWidget {
 
     @Override
     public int getX(AbsWidget widget) {
-        return (screenWidth - widget.getWidth()) / 2;
+        return getX() + (screenWidth - widget.getWidth()) / 2;
     }
 
     @Override
     public int getY(AbsWidget widget) {
-        return (screenHeight - widget.getHeight()) / 2;
+        return getY() + (screenHeight - widget.getHeight()) / 2;
     }
 
     @Override

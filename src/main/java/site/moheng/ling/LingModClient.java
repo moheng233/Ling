@@ -16,6 +16,7 @@ public class LingModClient implements ClientModInitializer {
     public void onInitializeClient() {
         initKeyBing();
         initGui();
+        LingModNetwork.initClient();
     }
     
     public void initGui() {

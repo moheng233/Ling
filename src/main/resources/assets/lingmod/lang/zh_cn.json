@@ -2,8 +2,12 @@
     "itemGroup.lingmod.general": "灵",
     "block.lingmod.spell_edit_table_block": "术式编程桌",
 
-    "item.lingmod.spell_code": "术式代码",
+    "trinkets.slot.head.spell": "术式代码",
 
+    "item.lingmod.spell_code": "术式代码",
+    "item.lingmod.spell_ring": "术灵手环",
+    "item.lingmod.spell_card": "魔法卡",
+    
     "spell_stack_data.lingmod.int": "整数",
     "spell_stack_data.lingmod.bool": "布尔",
     

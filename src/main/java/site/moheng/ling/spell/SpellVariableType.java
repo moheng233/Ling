@@ -12,4 +12,16 @@ public abstract class SpellVariableType<D> {
     public Text getDisplayType() {
         return Text.translatable(Util.createTranslationKey("spell_stack_data", SpellRegistry.SPELL_VAR_TYPE.getId(this)));
     }
+
+    public int getDisplayColor() {
+        return 0xffffffff;
+    }
+
+    public boolean canLink(SpellVariableType<?> other) {
+        if(this == other) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -34,12 +34,12 @@ public class WContainer extends AbsParentWidget {
 
     @Override
     public int getX(AbsWidget widget) {
-        return (int) pos_cache.get(widget).x;
+        return getX() + (int) pos_cache.get(widget).x;
     }
 
     @Override
     public int getY(AbsWidget widget) {
-        return (int) pos_cache.get(widget).y;
+        return getY() + (int) pos_cache.get(widget).y;
     }
 
     @Override

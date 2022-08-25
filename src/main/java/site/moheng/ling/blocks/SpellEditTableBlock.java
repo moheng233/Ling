@@ -29,7 +29,7 @@ public class SpellEditTableBlock extends BlockWithEntity {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
             BlockHitResult hit) {
         if (world.isClient) {
-            MinecraftClient.getInstance().setScreen(new WidgetScreen());
+            // MinecraftClient.getInstance().setScreen(new WidgetScreen());
         }
         return ActionResult.SUCCESS;
     }

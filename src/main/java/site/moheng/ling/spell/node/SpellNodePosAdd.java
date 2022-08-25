@@ -11,6 +11,8 @@ public class SpellNodePosAdd extends SpellHandleNode {
     public NodeIOPoint<BlockPos> posOutput = NodeIOPoint.create("pos", IOType.OUTPUT, SpellVariableTypes.POSITION);
 
     public SpellNodePosAdd() {
-        io.define(pos1Input).define(pos2Input).define(posOutput);
+        io.define(pos1Input)
+                .define(pos2Input)
+                .define(posOutput);
     }
 }

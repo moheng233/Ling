@@ -9,7 +9,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import site.moheng.ling.spell.SpellNode;
 import site.moheng.ling.spell.SpellRegistry;
+import site.moheng.ling.spell.SpellStream;
+import site.moheng.ling.spell.SpellNode.IOType;
 import site.moheng.ling.spell.SpellNode.NodeIOPoint;
+import site.moheng.ling.spell.SpellNode.NodeType;
 import site.moheng.ling.util.MathRect;
 
 public final class SpellNodeEntry {

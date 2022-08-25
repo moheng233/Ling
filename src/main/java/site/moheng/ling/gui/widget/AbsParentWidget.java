@@ -16,13 +16,10 @@ public abstract class AbsParentWidget extends AbsWidget {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        matrices.push();
-        matrices.translate(getX(), getY(), 0);
         var pos = convent(Point.of(mouseX, mouseY));
         for (AbsWidget widget : children) {
             widget.render(matrices,  pos.x(), pos.y(), delta);
         }
-        matrices.pop();
         super.render(matrices,  mouseX, mouseY, delta);
     }
 

@@ -50,11 +50,11 @@ public class WPanel extends AbsParentWidget {
 
     @Override
     public int getX(AbsWidget widget) {
-        return 0;
+        return getX() + 0;
     }
 
     @Override
     public int getY(AbsWidget widget) {
-        return 0;
+        return getY() + 0;
     }
 }

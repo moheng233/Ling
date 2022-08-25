@@ -23,6 +23,9 @@
     ],
     "client": [
       "site.moheng.ling.LingModClient"
+    ],
+    "cardinal-components-entity": [
+      "site.moheng.ling.LingModComponents.java"
     ]
   },
   "mixins": [
@@ -30,7 +33,11 @@
   ],
   "custom": {
     "loom:injected_interfaces": {
-    }
+    },
+    "cardinal-components": [
+      "lingmod:magician",
+      "lingmod:mana_container"
+    ]
   },
 
   "depends": {

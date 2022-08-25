@@ -35,8 +35,8 @@ public class NodeEditMenu extends AbsEditMenu {
         this.onNodeSelected = onNodeSelected;
         var count_y = 0;
         for (var node : SpellRegistry.SPELL_NODE) {
-            nodeMap.put(node, node.getRect(new Vec2f(5, count_y)));
-            count_y += node.getHeight() * scale + 5;
+            nodeMap.put(node, node.getRect(new Vec2f(0, count_y)));
+            count_y += node.getHeight() * scale + 10;
         }
     }
 

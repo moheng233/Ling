@@ -13,4 +13,8 @@ public class SpellVariableNodeLink extends SpellVariableType<SpellNodeEntry> {
         return Text.of("node");
     }
     
+    @Override
+    public int getDisplayColor() {
+        return 0xff0000ff;
+    }
 }

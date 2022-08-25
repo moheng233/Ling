@@ -1,8 +1,9 @@
 package site.moheng.ling.spell;
 
+import site.moheng.ling.spell.SpellNode.IExecNode;
 import site.moheng.ling.spell.entry.SpellNodeEntry;
 
-public abstract class SpellEventNode extends SpellNode {
+public abstract class SpellEventNode extends SpellNode implements IExecNode {
     public final NodeIOPoint<SpellNodeEntry> nextProcess = NodeIOPoint.create("next", IOType.OUTPUT);
 
     public SpellEventNode() {

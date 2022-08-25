@@ -3,6 +3,7 @@ package site.moheng.ling.gui;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -33,6 +34,8 @@ import site.moheng.ling.SpellNodes;
 import site.moheng.ling.gui.menu.AbsEditMenu;
 import site.moheng.ling.gui.menu.NodeEditMenu;
 import site.moheng.ling.spell.SpellNode;
+import site.moheng.ling.spell.SpellRegistry;
+import site.moheng.ling.spell.SpellNode.IOType;
 import site.moheng.ling.spell.SpellNode.NodeIOPoint;
 import site.moheng.ling.spell.entry.SpellLinkEntry;
 import site.moheng.ling.spell.entry.SpellNodeEntry;
@@ -63,13 +66,25 @@ public class SpellEditScreen extends Screen {
     private double editOffsetY = 0;
     private float editScale = 1;
 
+    private Consumer<NbtCompound> onSave = (nbt) -> {
+    };
+
     private Optional<AbsEditMenu> menu = Optional.empty();
 
-    public SpellEditScreen() {
+    public SpellEditScreen(Consumer<NbtCompound> onSave) {
         super(Text.translatable(Util.createTranslationKey("gui", new Identifier(LingMod.MODID, "edit_screen"))));
 
-        addNode(new Vec2f(10, 80), SpellNodes.ON_USE);
-        addNode(new Vec2f(10, 10), SpellNodes.GET_ENTITY_POS);
+        this.onSave = onSave;
+
+        for (var node : SpellRegistry.SPELL_NODE) {
+            node.layout(true);
+        }
+    }
+
+    public static SpellEditScreen readAndOnSave(NbtCompound nbt, Consumer<NbtCompound> onSave) {
+        var edit = new SpellEditScreen(onSave);
+        edit.readFromNbt(nbt);
+        return edit;
     }
 
     public Vec3i getStartPos() {
@@ -96,23 +111,24 @@ public class SpellEditScreen extends Screen {
     }
 
     @Override
+    public void close() {
+        onSave.accept(saveToNbt());
+        super.close();
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         RenderSystem.disableDepthTest();
         drawBackground(matrices, delta, mouseX, mouseY);
 
-        drawEditRect(matrices, getStartX() + BACKGROUND.lPadding, getStartY() + BACKGROUND.tPadding, editOffsetX,
-                editOffsetY, editScale, editWidth - BACKGROUND.hPadding, editHeight - BACKGROUND.vPadding,
+        drawEditRect(matrices, getStartX(), getStartY(), editOffsetX,
+                editOffsetY, editScale, editWidth, editHeight,
                 mouseX, mouseY);
 
         if (menu.isPresent()) {
             menu.get().render(matrices, mouseX, mouseY, delta);
         }
 
-        var pos = convertEditPosNoScale(new Vec2f(mouseX, mouseY));
-        drawTextWithShadow(matrices, textRenderer,
-                Text.literal(String.format("X: %5f, y: %5f\nscale: %f", pos.x, pos.y, editScale)),
-                4, 4,
-                0xffffff);
         RenderSystem.enableDepthTest();
     }
 
@@ -142,7 +158,7 @@ public class SpellEditScreen extends Screen {
             var one = entry.getKey().node.getPoint(entry.getKey().point).add(posMap.get(entry.getKey().node)).center();
             var two = entry.getValue().node.getPoint(entry.getValue().point).add(posMap.get(entry.getValue().node))
                     .center();
-            drawLine(matrices, one.x, one.y, two.x, two.y, 0xffffffff);
+            drawLine(matrices, one.x, one.y, two.x, two.y, entry.getKey().point.varType.getDisplayColor());
         }
         // 绘制鼠标拖动时的链接线
         if (mouseLinkPoint.isPresent()) {
@@ -150,7 +166,8 @@ public class SpellEditScreen extends Screen {
             var point = mouseLinkPoint.get().node.getPoint(mouseLinkPoint.get().point)
                     .add(posMap.get(mouseLinkPoint.get().node)).center();
             var mouse = convertEditPos(new Vec2f(mouseX, mouseY));
-            drawLine(matrices, point.x, point.y, mouse.x, mouse.y, 0xffffffff);
+            drawLine(matrices, point.x, point.y, mouse.x, mouse.y,
+                    mouseLinkPoint.get().point.varType.getDisplayColor());
             matrices.pop();
         }
         matrices.pop();
@@ -180,8 +197,8 @@ public class SpellEditScreen extends Screen {
      * @return
      */
     protected Vec2f convertEditPos(Vec2f screenPos) {
-        return new Vec2f(screenPos.x - getStartX() - BACKGROUND.lPadding - (float) editOffsetX,
-                screenPos.y - getStartY() - BACKGROUND.tPadding - (float) editOffsetY).multiply(1 / editScale);
+        return new Vec2f(screenPos.x - getStartX() - (float) editOffsetX,
+                screenPos.y - getStartY() - (float) editOffsetY).multiply(1 / editScale);
     }
 
     /**
@@ -191,8 +208,8 @@ public class SpellEditScreen extends Screen {
      * @return
      */
     protected Vec2f convertEditPosNoScale(Vec2f screenPos) {
-        return new Vec2f(screenPos.x - getStartX() - BACKGROUND.lPadding - (float) editOffsetX,
-                screenPos.y - getStartY() - BACKGROUND.tPadding - (float) editOffsetY);
+        return new Vec2f(screenPos.x - getStartX() - (float) editOffsetX,
+                screenPos.y - getStartY() - (float) editOffsetY);
     }
 
     protected Optional<SpellLinkEntry> getNodePointBy(Vec2f pos) {
@@ -325,9 +342,22 @@ public class SpellEditScreen extends Screen {
         entry.node.drawNode(matrices, this, textRenderer, entry.extend);
     }
 
-    protected void linkNodePoint(SpellNodeEntry form, NodeIOPoint<?> formPoint, SpellNodeEntry target,
+    protected boolean linkNodePoint(SpellNodeEntry form, NodeIOPoint<?> formPoint, SpellNodeEntry target,
             NodeIOPoint<?> targePoint) {
-        linkMap.put(new SpellLinkEntry(form, formPoint), new SpellLinkEntry(target, targePoint));
+        if (formPoint.io == IOType.OUTPUT) {
+            if (formPoint.varType.canLink(targePoint.varType)) {
+                linkMap.put(new SpellLinkEntry(form, formPoint), new SpellLinkEntry(target, targePoint));
+                return true;
+            }
+        } else {
+            if (targePoint.varType.canLink(formPoint.varType)) {
+                linkMap.put(new SpellLinkEntry(target, targePoint), new SpellLinkEntry(form, formPoint));
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     protected void unLinkNodePoint(SpellLinkEntry link) {
@@ -470,8 +500,10 @@ public class SpellEditScreen extends Screen {
             if (mouseLinkPoint.isPresent()) {
                 var target = getNodePointByScreen(new Vec2f((float) mouseX, (float) mouseY));
                 if (target.isPresent()) {
-                    linkNodePoint(mouseLinkPoint.get().node, mouseLinkPoint.get().point, target.get().node,
-                            target.get().point);
+                    if (IOType.canLink(mouseLinkPoint.get().point.io, target.get().point.io)) {
+                        linkNodePoint(mouseLinkPoint.get().node, mouseLinkPoint.get().point, target.get().node,
+                                target.get().point);
+                    }
                 }
 
                 mouseLinkPoint = Optional.empty();
@@ -562,8 +594,8 @@ public class SpellEditScreen extends Screen {
         {
             var link_nbt = nbt.get(KEY_LINK_MAP);
             for (var key : link_nbt.getKeys()) {
-                var key_s = key.split("$");
-                var val_s = link_nbt.getString(key).split("$");
+                var key_s = key.split("\\$");
+                var val_s = link_nbt.getString(key).split("\\$");
 
                 var from = nodeMap.get(key_s[0]);
                 var next = nodeMap.get(val_s[0]);

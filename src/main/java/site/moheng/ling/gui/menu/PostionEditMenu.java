@@ -38,7 +38,7 @@ public class PostionEditMenu extends AbsEditMenu implements ParentElement {
     };
 
     public PostionEditMenu(MinecraftClient client, int x, int y, BlockPos pos, Consumer<BlockPos> onSave) {
-        super(client, x + width / 2, y + height / 2);
+        super(client, x, y);
         {
             int startX = this.x + BACKGROUND.lPadding;
             int startY = this.y - BACKGROUND.tPadding + height - BACKGROUND.vPadding;
