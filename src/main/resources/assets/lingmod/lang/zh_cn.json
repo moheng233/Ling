@@ -2,6 +2,8 @@
     "itemGroup.lingmod.general": "灵",
     "block.lingmod.spell_edit_table_block": "术式编程桌",
 
+    "attribute.lingmod.max_mana": "最大法力",
+
     "trinkets.slot.head.spell": "术式代码",
 
     "item.lingmod.spell_code": "术式代码",

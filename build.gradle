@@ -49,6 +49,8 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
+	modImplementation("net.fabricmc:fabric-language-kotlin:1.8.3+kotlin.1.7.10")
+
 	implementation "org.apache.commons:commons-collections4:4.4"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
