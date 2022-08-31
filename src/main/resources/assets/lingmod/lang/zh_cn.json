@@ -4,11 +4,10 @@
 
     "attribute.lingmod.max_mana": "最大法力",
 
-    "trinkets.slot.head.spell": "术式代码",
-
     "item.lingmod.spell_code": "术式代码",
     "item.lingmod.spell_ring": "术灵手环",
     "item.lingmod.spell_card": "魔法卡",
+    "item.lingmod.spell_rune": "符文",
     
     "spell_stack_data.lingmod.int": "整数",
     "spell_stack_data.lingmod.bool": "布尔",

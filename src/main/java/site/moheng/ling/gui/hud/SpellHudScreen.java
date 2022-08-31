@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import site.moheng.ling.LingMod;
 
 public class SpellHudScreen extends DrawableHelper implements HudRenderCallback {
@@ -28,10 +29,11 @@ public class SpellHudScreen extends DrawableHelper implements HudRenderCallback 
 
     @Override
     public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+        assert client.player != null;
         var maxMana = client.player.getAttributeValue(LingMod.MOD_MAX_MANA);
 
         if(maxMana >= 0) {
-            
+            drawTextWithShadow(matrixStack, client.textRenderer, Text.of("MaxMana: " + maxMana), 0,0, 0xffffff);
         }
     }
 }

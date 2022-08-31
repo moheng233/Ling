@@ -31,10 +31,6 @@ public class LingMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
-
 		LOGGER.info("灵正在初始化!");
 
 		Registry.register(Registry.ATTRIBUTE, new Identifier(MODID, "max_mana"), MOD_MAX_MANA);
@@ -46,11 +42,9 @@ public class LingMod implements ModInitializer {
 		LingModItems.init();
 		LingModBlocks.init();
 
-		
 		FieldRegistrationHandler.register(LingModBlockEntitys.class, MODID, false);
 		FieldRegistrationHandler.register(LingModItems.class, MODID, false);
 		FieldRegistrationHandler.register(LingModBlocks.class, MODID, false);
-
 	}
 
 	public void initGui() {

@@ -4,6 +4,7 @@
   "package": "site.moheng.ling.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "LivingPlayerMixin"
   ],
   "client": [
     "ExampleMixin",

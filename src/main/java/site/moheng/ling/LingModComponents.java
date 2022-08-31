@@ -16,7 +16,7 @@ public class LingModComponents implements EntityComponentInitializer {
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-        registry.registerForPlayers(MAGICIAN, player -> new MagicianComponents(player), RespawnCopyStrategy.ALWAYS_COPY);  
+        registry.registerForPlayers(MAGICIAN, MagicianComponents::new, RespawnCopyStrategy.ALWAYS_COPY);
         registry.registerForPlayers(MANA_CONTAINER, player -> new ManaContainerComponents(), RespawnCopyStrategy.ALWAYS_COPY);      
     }
     

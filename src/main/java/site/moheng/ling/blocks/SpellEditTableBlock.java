@@ -23,12 +23,12 @@ public class SpellEditTableBlock extends BlockWithEntity {
         return new SpellEditTableBlockEntity(pos, state);
     }
 
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
-            BlockHitResult hit) {
-        if (world.isClient) {
-            // MinecraftClient.getInstance().setScreen(new WidgetScreen());
-        }
-        return ActionResult.SUCCESS;
-    }
+//    @Override
+//    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
+//            BlockHitResult hit) {
+////        if (world.isClient()) {
+////            // MinecraftClient.getInstance().setScreen(new WidgetScreen());
+////        }
+//        return ActionResult.SUCCESS;
+//    }
 }
