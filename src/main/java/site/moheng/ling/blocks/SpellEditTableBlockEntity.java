@@ -9,6 +9,5 @@ public class SpellEditTableBlockEntity extends BlockEntity {
 
     public SpellEditTableBlockEntity(BlockPos pos, BlockState state) {
         super(LingModBlockEntitys.SPELL_EDIT_TABLE_BLOCK, pos, state);
-        //TODO Auto-generated constructor stub
     }
 }

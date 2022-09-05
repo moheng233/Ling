@@ -1,6 +1,5 @@
 package site.moheng.ling.components;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentV3;
 import io.wispforest.owo.nbt.NbtKey;
 import net.minecraft.nbt.NbtCompound;
 

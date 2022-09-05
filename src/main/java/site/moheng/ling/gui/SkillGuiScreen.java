@@ -12,12 +12,10 @@ public class SkillGuiScreen extends HandledScreen<SKillGuiScreenHandler> {
 
     public SkillGuiScreen(SKillGuiScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
-        //TODO Auto-generated constructor stub
     }
 
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-        // TODO Auto-generated method stub
         
     }
     

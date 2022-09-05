@@ -6,11 +6,13 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
+import site.moheng.ling.blocks.ShelfBlock;
 import site.moheng.ling.blocks.SpellEditTableBlock;
 
 public class LingModBlocks implements BlockRegistryContainer {
     
-    public static final SpellEditTableBlock SPELL_EDIT_TABLE_BLOCK = new SpellEditTableBlock(FabricBlockSettings.of(Material.WOOD));
+    public static final SpellEditTableBlock SPELL_EDIT_TABLE_BLOCK = new SpellEditTableBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque());
+    public static final ShelfBlock SHELF_BLOCK = new ShelfBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque());
 
     public static void init() {
         

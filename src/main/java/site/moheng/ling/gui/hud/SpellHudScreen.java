@@ -7,9 +7,10 @@ import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import site.moheng.ling.LingMod;
+import site.moheng.ling.LingModComponents;
 
 public class SpellHudScreen extends DrawableHelper implements HudRenderCallback {
-    private MinecraftClient client = MinecraftClient.getInstance();
+    private final MinecraftClient client = MinecraftClient.getInstance();
 
     public int getCenterX(Window windows,int offset) {
         return windows.getScaledWidth() / 2 + offset;
@@ -34,6 +35,13 @@ public class SpellHudScreen extends DrawableHelper implements HudRenderCallback 
 
         if(maxMana >= 0) {
             drawTextWithShadow(matrixStack, client.textRenderer, Text.of("MaxMana: " + maxMana), 0,0, 0xffffff);
+        }
+
+        var magician = client.player.getComponent(LingModComponents.MAGICIAN);
+        var height = client.textRenderer.fontHeight;
+        for (var text : magician.stackTexts) {
+            client.textRenderer.drawWithShadow(matrixStack, text, 0, height, 0xffffff);
+            height += client.textRenderer.fontHeight + 2;
         }
     }
 }

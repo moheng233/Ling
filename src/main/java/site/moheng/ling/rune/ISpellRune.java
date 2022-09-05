@@ -1,7 +1,5 @@
 package site.moheng.ling.rune;
 
-import java.util.List;
-
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
 import net.minecraft.item.ItemStack;
@@ -10,18 +8,46 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.registry.SimpleRegistry;
 import site.moheng.ling.LingMod;
+import site.moheng.ling.components.IMagician;
+
+import java.util.List;
 
 public interface ISpellRune {
-    public static final SimpleRegistry<ISpellRune> RUNES = FabricRegistryBuilder
+    SimpleRegistry<ISpellRune> RUNES = FabricRegistryBuilder
             .createSimple(ISpellRune.class, new Identifier(LingMod.MODID, "rune"))
             .attribute(RegistryAttribute.SYNCED)
             .buildAndRegister();
 
-    public default Text getRuneName() {
-        return Text.translatable(Util.createTranslationKey("rune", RUNES.getId(this)));
-    };
+    static Identifier getRuneModelId(ISpellRune rune) {
+        Identifier id = rune.getID();
+        return getRuneModelId(id);
+    }
 
-    public default void appendRuneTooltip(ItemStack stack, List<Text> tooltip) {
-        
+    static Identifier getRuneModelId(Identifier id) {
+        return new Identifier(id.getNamespace(), "item/rune/" + id.getPath());
+    }
+
+    default String getTranslationKey() {
+        return Util.createTranslationKey("rune", getID());
+    }
+
+    default Text getRuneName() {
+        return Text.translatable(getTranslationKey());
+    }
+
+    default Identifier getID() {
+        return RUNES.getId(this);
+    }
+
+    default void appendRuneTooltip(final ItemStack stack, final List<Text> tooltip) {
+
+    }
+
+    default void exec(final IMagician magician) {
+
+    }
+
+    default Identifier getRuneModelId() {
+        return getRuneModelId(this);
     }
 }
